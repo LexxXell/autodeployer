@@ -1,0 +1,3 @@
+cd $PROJECT_PATH
+git pull origin $TARGET_BRANCH
+exec $AFTER_PULL_CALLBACK_SH
