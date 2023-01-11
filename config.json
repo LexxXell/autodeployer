@@ -1,7 +1,7 @@
 {
   "author/repository": {
     "branch": "branch",
-    "hook_path": "/path/to/hook",
+    "hook_path": "/path/to/hook.sh",
     "project_path": "/path/to/project",
     "log_dir_path": "/path/to/logs",
     "callback": "bash script"

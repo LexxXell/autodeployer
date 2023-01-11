@@ -36,7 +36,8 @@ app.post('/', (request, response) => {
   }
 });
 
-function execHook(repositoryConfig) {
+function execHook(repositoryName) {
+  const repositoryConfig = config[repositoryName];
   if (!repositoryConfig.hook_path) {
     return false;
   }
@@ -55,13 +56,19 @@ function execHook(repositoryConfig) {
       }
       if (repositoryConfig.log_dir_path) {
         fs.writeFileSync(
-          path.resolve(repositoryConfig.log_dir_path, 'stdout.log'),
-          new Date() + '\n' + stdout + '\n',
+          path.resolve(
+            repositoryConfig.log_dir_path,
+            `${repositoryName.replace('/', '.')}_stdout.log`
+          ),
+          `${new Date()}\n${stdout}\n`,
         );
         fs.writeFileSync(
-          path.resolve(repositoryConfig.log_dir_path, 'stderr.log'),
-          new Date() + '\n' + stderr + '\n',
-        );
+          path.resolve(
+            repositoryConfig.log_dir_path,
+            `${repositoryName.replace('/', '.')}_stderr.log`
+          ),
+          `${new Date()}\n${stderr}\n`,
+        )
       }
     });
 }
