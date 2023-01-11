@@ -17,7 +17,7 @@ The webhook from github calls pull for the repository, and does the callback.
 
 ## Usage
 
-Clone the repository to the server. Configure the github repository to call webhook. Configure the webserver on the server as a reverse proxy (if using the Nginx/Apache/etc webserver).
+Clone the repository to the server. Configure the github repository to call webhook, need use content type application/json. Configure the webserver on the server as a reverse proxy (if using the Nginx/Apache/etc webserver).
 
 Set the dependencies with yarn:
 ```sh
