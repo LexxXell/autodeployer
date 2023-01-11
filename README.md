@@ -25,6 +25,8 @@ $ yarn
 ```
 Rename the .env.example file to .env and modify it to suit your needs.
 
+Configure config.json according to your requirements, you can specify multiple repositories to track.
+
 Run the bot:
 ```sh
 $ yarn dev

@@ -1,8 +1,6 @@
-require('dotenv').config(
-  process.argv[2]
-    ? { path: process.argv[2] }
-    : {}
-);
+require('dotenv').config();
+const path = require('node:path');
+const config = require('../config.json');
 const { exec } = require('node:child_process');
 const fs = require('fs');
 const express = require('express');
@@ -12,12 +10,14 @@ app.use(express.json());
 
 app.post('/', (request, _) => {
   try {
+    const repositoryName = request.body.repository.full_name;
+    const branch = request.body.ref.split('/').pop();
     if (
-      request.body.repository.full_name !== process.env.GITHUB_REPOSITORY ||
-      request.body.ref.split('/').pop() !== process.env.TARGET_BRANCH
+      !Object.keys(config).includes(repositoryName) ||
+      config[repositoryName].branch !== branch
     ) {
       return false;
-    };
+    }
     console.log(new Date(), 'Github repository updated.');
     return execHookSh();
   } catch (error) {
@@ -26,27 +26,31 @@ app.post('/', (request, _) => {
   }
 });
 
-function execHookSh() {
-  if (!process.env.HOOK_SH_PATH) {
-    return false;
-  }
-  return exec(process.env.HOOK_SH_PATH, (error, stdout, stderr) => {
-    if (error) {
-      throw new Error(error);
-    }
-    if (process.env.LOG_STDOUT_PATH) {
-      fs.writeFileSync(
-        process.env.LOG_STDOUT_PATH,
-        new Date() + '\n' + stdout + '\n',
-      );
-    }
-    if (process.env.LOG_STDERR_PATH) {
-      fs.writeFileSync(
-        process.env.LOG_STDERR_PATH,
-        new Date() + '\n' + stderr + '\n',
-      );
-    }
-  });
+function execHookSh(repositoryConfig) {
+  return exec(repositoryConfig.hook_path,
+    {
+      env: {
+        ...process.env,
+        PROJECT_PATH: repositoryConfig.project_path,
+        BRANCH: repositoryConfig.branch,
+        CALLBACK: repositoryConfig.callback,
+      }
+    },
+    (error, stdout, stderr) => {
+      if (error) {
+        throw new Error(error);
+      }
+      if (repositoryConfig.log_dir_path) {
+        fs.writeFileSync(
+          path.resolve(repositoryConfig.log_dir_path, 'stdout.log'),
+          new Date() + '\n' + stdout + '\n',
+        );
+        fs.writeFileSync(
+          path.resolve(repositoryConfig.log_dir_path, 'stderr.log'),
+          new Date() + '\n' + stderr + '\n',
+        );
+      }
+    });
 }
 
-app.listen(process.env.GITHUB_WEBHOOK_PORT || 9001);
+app.listen(process.env.WEBHOOK_PORT || 9001);
