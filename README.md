@@ -29,6 +29,10 @@ Run the bot:
 ```sh
 $ yarn dev
 ```
+You can specify the .env file at startup:
+```sh
+$ node src/index.js /path/to/.env
+```
 
 ## Deploy и CI/CD
 It is recommended to use pm2 to run the autodeployer in production.

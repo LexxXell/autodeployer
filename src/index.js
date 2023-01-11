@@ -1,4 +1,8 @@
-require('dotenv').config();
+require('dotenv').config(
+  process.argv[2]
+    ? { path: process.argv[2] }
+    : {}
+);
 const { exec } = require('node:child_process');
 const fs = require('fs');
 const express = require('express');
