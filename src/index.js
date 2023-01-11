@@ -12,13 +12,15 @@ app.use(express.json());
 app.post('/', (request, response) => {
   try {
     const repositoryName = request.body.repository.full_name;
-    const branch = request.body.ref.split('/').pop();
+    const branch = request.body.ref
+      ? request.body.ref.split('/').pop()
+      : undefined;
     if (
       !Object.keys(config).includes(repositoryName) ||
       config[repositoryName].branch !== branch
     ) {
-      response.status(httpCode.BAD_REQUEST);
-      response.json({ status: httpCode.BAD_REQUEST });
+      response.status(httpCode.NOT_FOUND);
+      response.json({ status: httpCode.NOT_FOUND });
       return false;
     }
     console.log(new Date(), `Updated github repository: ${repositoryName}`);
