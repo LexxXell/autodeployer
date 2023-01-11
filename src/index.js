@@ -24,7 +24,7 @@ app.post('/', (request, response) => {
       return false;
     }
     console.log(new Date(), `Updated github repository: ${repositoryName}`);
-    execHook(config[repositoryName]);
+    execHook(repositoryName);
     response.status(httpCode.OK);
     response.json({ status: httpCode.OK });
     return true;
