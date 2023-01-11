@@ -27,6 +27,9 @@ app.post('/', (request, _) => {
 });
 
 function execHookSh(repositoryConfig) {
+  if(!repositoryConfig.hook_path) {
+    return false;
+  }
   return exec(repositoryConfig.hook_path,
     {
       env: {
