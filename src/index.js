@@ -4,11 +4,12 @@ const config = require('../config.json');
 const { exec } = require('node:child_process');
 const fs = require('fs');
 const express = require('express');
+const { httpCode } = require('./enum')
 
 const app = express();
 app.use(express.json());
 
-app.post('/', (request, _) => {
+app.post('/', (request, response) => {
   try {
     const repositoryName = request.body.repository.full_name;
     const branch = request.body.ref.split('/').pop();
@@ -16,18 +17,25 @@ app.post('/', (request, _) => {
       !Object.keys(config).includes(repositoryName) ||
       config[repositoryName].branch !== branch
     ) {
+      response.status(httpCode.BAD_REQUEST);
+      response.json({ status: httpCode.BAD_REQUEST });
       return false;
     }
     console.log(new Date(), 'Github repository updated.');
-    return execHookSh();
+    execHook();
+    response.status(httpCode.OK);
+    response.json({ status: httpCode.OK });
+    return true;
   } catch (error) {
-    console.err(error);
+    console.error(error);
+    response.status(httpCode.INTERNAL_SERVER_ERROR);
+    response.json({ status: httpCode.INTERNAL_SERVER_ERROR });
     return false;
   }
 });
 
-function execHookSh(repositoryConfig) {
-  if(!repositoryConfig.hook_path) {
+function execHook(repositoryConfig) {
+  if (!repositoryConfig.hook_path) {
     return false;
   }
   return exec(repositoryConfig.hook_path,
