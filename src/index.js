@@ -22,7 +22,7 @@ app.post('/', (request, response) => {
       return false;
     }
     console.log(new Date(), 'Github repository updated.');
-    execHook();
+    execHook(config[repositoryName]);
     response.status(httpCode.OK);
     response.json({ status: httpCode.OK });
     return true;
