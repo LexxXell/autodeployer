@@ -21,7 +21,7 @@ app.post('/', (request, response) => {
       response.json({ status: httpCode.BAD_REQUEST });
       return false;
     }
-    console.log(new Date(), 'Github repository updated.');
+    console.log(new Date(), `Updated github repository: ${repositoryName}`);
     execHook(config[repositoryName]);
     response.status(httpCode.OK);
     response.json({ status: httpCode.OK });
