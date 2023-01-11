@@ -4,7 +4,7 @@ The webhook from github calls pull for the repository, and does the callback.
 ## Contents
 - [Technologies](#Technologies)
 - [Usage](#usage)
-- [Deploy и CI/CD](#deploy-и-ci/cd)
+- [Deploy и CI/CD](#deploy-and-ci/cd)
 - [Project Team](#project-team)
 
 ## Technologies
