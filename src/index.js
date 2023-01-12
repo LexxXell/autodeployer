@@ -1,40 +1,29 @@
 require('dotenv').config();
+
+const fs = require('fs');
 const path = require('node:path');
 const config = require('../config.json');
 const { exec } = require('node:child_process');
-const fs = require('fs');
-const express = require('express');
-const { httpCode } = require('./enum')
+const { logger } = require('./helpers');
+const githubEventListener = require('./github-event-listener');
 
-const app = express();
-app.use(express.json());
-
-app.post('/', (request, response) => {
+githubEventListener.onPushCallback = (data) => {
   try {
-    const repositoryName = request.body.repository.full_name;
-    const branch = request.body.ref
-      ? request.body.ref.split('/').pop()
-      : undefined;
+    const repositoryName = data.repository.full_name;
+    const branch = data.ref ? data.ref.split('/').pop() : undefined;
     if (
       !Object.keys(config).includes(repositoryName) ||
       config[repositoryName].branch !== branch
     ) {
-      response.status(httpCode.NOT_FOUND);
-      response.json({ status: httpCode.NOT_FOUND });
       return false;
     }
-    console.log(new Date(), `Updated github repository: ${repositoryName}`);
-    execHook(repositoryName);
-    response.status(httpCode.OK);
-    response.json({ status: httpCode.OK });
-    return true;
+    logger(`Updated github repository: ${repositoryName} #${branch}`);
+    return execHook(repositoryName);
   } catch (error) {
-    console.error(error);
-    response.status(httpCode.INTERNAL_SERVER_ERROR);
-    response.json({ status: httpCode.INTERNAL_SERVER_ERROR });
+    logger(error);
     return false;
   }
-});
+}
 
 function execHook(repositoryName) {
   const repositoryConfig = config[repositoryName];
@@ -72,5 +61,3 @@ function execHook(repositoryName) {
       }
     });
 }
-
-app.listen(process.env.WEBHOOK_PORT || 9001);
