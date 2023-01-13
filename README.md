@@ -26,14 +26,21 @@ $ yarn
 Rename the .env.example file to .env and modify it to suit your needs.
 
 Configure config.json according to your requirements, you can specify multiple repositories to track.
+```json
+{
+  "author/repository": { // full name of the github repository (ex. "LexxXell/autodeployer")
+    "branch": "branch", // the name of the branch that will trigger the hook when updated
+    "hook_path": "/path/to/hook.sh", // defaul can use "<autodeployer_dir_path>/hooks/default_hook.sh"
+    "project_path": "/path/to/project", // path to project directory
+    "log_dir_path": "/path/to/logs", // log files will be added here
+    "callback": "bash script" // this is passed to hook-script as a callback to be executed after the pull request is executed
+  }
+}
+```
 
 Run autodeployer:
 ```sh
 $ yarn dev
-```
-You can specify the .env file at startup:
-```sh
-$ node src/index.js /path/to/.env
 ```
 
 ## Deploy и CI/CD
