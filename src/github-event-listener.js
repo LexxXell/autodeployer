@@ -7,6 +7,7 @@ const {
 } = require('./enums')
 
 const githubEventListener = {}
+
 githubEventListener.server = express();
 githubEventListener.server.use(express.json());
 githubEventListener.server.use(express.urlencoded({ extended: true }));
@@ -22,7 +23,11 @@ githubEventListener.server.post('/', (request, response) => {
         logger('Github event PING...')
       }
       if (request.headers[githubHeader.EVENT] === githubEvent.PUSH) {
-        githubEventListener.onPushCallback(request.body);
+        githubEventListener.onPushCallback(
+          request.body.payload
+            ? JSON.parse(request.body.payload)
+            : request.body
+        );
       }
     } else {
       response
