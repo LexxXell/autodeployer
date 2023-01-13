@@ -2,12 +2,12 @@ require('dotenv').config();
 
 const fs = require('fs');
 const path = require('node:path');
-const config = require('../config.json');
 const { exec } = require('node:child_process');
-const { logger } = require('./helpers');
+const { logger, configConverter } = require('./helpers');
+const config = configConverter(require('../config.json'));
 
-const githubEventListener = require('./github-event-listener');
 const hookExecutor = require('./hook-executor');
+const githubEventListener = require('./github-event-listener');
 
 githubEventListener.onPushCallback = (data) => {
   try {
@@ -26,4 +26,3 @@ githubEventListener.onPushCallback = (data) => {
     return false;
   }
 }
-

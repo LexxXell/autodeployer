@@ -19,20 +19,20 @@ The webhook from github calls pull for the repository, and does the callback.
 
 Clone the repository to the server. Configure the github repository to call webhook, need use content type application/json. Configure the webserver on the server as a reverse proxy (if using the Nginx/Apache/etc webserver).
 
-Set the dependencies with yarn:
+Install the dependencies with yarn:
 ```sh
 $ yarn
 ```
 Rename the .env.example file to .env and modify it to suit your needs.
 
 Configure config.json according to your requirements, you can specify multiple repositories to track.
-```js
-"author/repository" // full name of the github repository (ex. "LexxXell/autodeployer")
-"branch" // the name of the branch that will trigger the hook when updated
-"hook_path" // defaul can use "<autodeployer_dir_path>/hooks/default_hook.sh"
-"project_path" // path to project directory
-"log_dir_path" // log files will be added here
-"callback" // this is passed to hook-script as a callback to be executed after the pull request is executed
+```
+"full_name" - full name of the github repository (ex. "LexxXell/autodeployer")
+"branch" - the name of the branch that will trigger the hook when updated
+"hook_path" - defaul can use "<autodeployer_dir_path>/hooks/default_hook.sh"
+"project_path" - path to project directory
+"log_dir_path" - log files will be added here
+"callback" - this is passed to hook-script as a callback to be executed after the pull request is executed
 ```
 
 Run autodeployer:
