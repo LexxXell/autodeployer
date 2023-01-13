@@ -32,7 +32,7 @@ Configure config.json according to your requirements, you can specify multiple r
 "hook_path" - defaul can use "<autodeployer_dir_path>/hooks/default_hook.sh"
 "project_path" - path to project directory
 "log_dir_path" - log files will be added here
-"callback" - this is passed to hook-script as a callback to be executed after the pull request is executed
+"callback" - this is passed to hook-script as a callback to be executed after the pull request
 ```
 
 Run autodeployer:
