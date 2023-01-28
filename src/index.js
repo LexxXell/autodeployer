@@ -1,8 +1,5 @@
 require('dotenv').config();
 
-const fs = require('fs');
-const path = require('node:path');
-const { exec } = require('node:child_process');
 const { logger, configConverter } = require('./helpers');
 const config = configConverter(require('../config.json'));
 
@@ -25,4 +22,4 @@ githubEventListener.onPushCallback = (data) => {
     logger(error);
     return false;
   }
-}
+};
