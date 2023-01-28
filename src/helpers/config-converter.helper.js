@@ -9,9 +9,11 @@ function toAbsolute(filePath) {
       'Unable to convert relative path to absolute!\n' + filePath
     );
   }
-  logger('INFO: The config contains a relative path, it is converted to absolute, make sure the conversion is correct:');
-  logger(`└╴${filePath}`)
-  logger(`  └╴${absolutePath}`)
+  logger(
+    'INFO: The config contains a relative path, it is converted to absolute, make sure the conversion is correct:'
+  );
+  logger(`└╴${filePath}`);
+  logger(`  └╴${absolutePath}`);
   return absolutePath;
 }
 

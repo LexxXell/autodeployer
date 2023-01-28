@@ -6,4 +6,4 @@ module.exports = {
   githubEvent,
   githubHeader,
   httpStatus,
-}
+};
